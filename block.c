@@ -3671,6 +3671,7 @@ int bdrv_key_required(BlockDriverState *bs)
 
 int bdrv_set_key(BlockDriverState *bs, const char *key)
 {
+    fprintf(stderr, "Called bdrv_set_key() with key '%s'\n", key)
     int ret;
     if (bs->backing_hd && bs->backing_hd->encrypted) {
         ret = bdrv_set_key(bs->backing_hd, key);

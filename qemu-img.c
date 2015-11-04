@@ -184,6 +184,7 @@ static int GCC_FMT_ATTR(2, 3) qprintf(bool quiet, const char *fmt, ...)
 /* XXX: put correct support for win32 */
 static int read_password(char *buf, int buf_size)
 {
+    fprintf(stderr, "Called read_password()\n")
     int c, i;
     printf("Password: ");
     fflush(stdout);
@@ -329,7 +330,7 @@ static BlockDriverState *bdrv_new_open(const char *id,
     }
 
     if (bdrv_is_encrypted(bs) && require_io) {
-        qprintf(quiet, "Disk image '%s' is encrypted.\n", filename);
+        qprintf(quiet, "Disk image '%s' is encrypted (FLAG).\n", filename);
         if (read_password(password, sizeof(password)) < 0) {
             error_report("No password given");
             goto fail;
