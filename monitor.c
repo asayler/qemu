@@ -5355,7 +5355,7 @@ void monitor_init(CharDriverState *chr, int flags)
 static void bdrv_password_cb(void *opaque, const char *password,
                              void *readline_opaque)
 {
-    fprintf(stderr, "Called bdrv_password_cb() with password '%s'\n", password)
+    fprintf(stderr, "Called bdrv_password_cb() with password '%s'\n", password);
     Monitor *mon = opaque;
     BlockDriverState *bs = readline_opaque;
     int ret = 0;

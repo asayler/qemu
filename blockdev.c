@@ -1587,7 +1587,7 @@ void qmp_block_passwd(bool has_device, const char *device,
                       bool has_node_name, const char *node_name,
                       const char *password, Error **errp)
 {
-    fprintf(stderr, "Called qmp_block_passwd() with password '%s'\n", password)
+    fprintf(stderr, "Called qmp_block_passwd() with password '%s'\n", password);
     Error *local_err = NULL;
     BlockDriverState *bs;
     int err;
@@ -1614,7 +1614,7 @@ static void qmp_bdrv_open_encrypted(BlockDriverState *bs, const char *filename,
                                     int bdrv_flags, BlockDriver *drv,
                                     const char *password, Error **errp)
 {
-    fprintf(stderr, "Called qmp_bdrv_open_encrypted() with password '%s'\n", password)
+    fprintf(stderr, "Called qmp_bdrv_open_encrypted() with password '%s'\n", password);
     Error *local_err = NULL;
     int ret;
 
