@@ -265,6 +265,8 @@ void monitor_read_command(Monitor *mon, int show_prompt)
 int monitor_read_password(Monitor *mon, ReadLineFunc *readline_func,
                           void *opaque)
 {
+    fprintf(stderr, "Called monitor_read_password()\n");
+
     if (monitor_ctrl_mode(mon)) {
         qerror_report(QERR_MISSING_PARAMETER, "password");
         return -EINVAL;
@@ -5379,6 +5381,8 @@ int monitor_read_bdrv_key_start(Monitor *mon, BlockDriverState *bs,
                                 BlockDriverCompletionFunc *completion_cb,
                                 void *opaque)
 {
+    fprintf(stderr, "Called monitor_read_bdrv_key_start()\n");
+
     int err;
 
     if (!bdrv_key_required(bs)) {
@@ -5393,7 +5397,7 @@ int monitor_read_bdrv_key_start(Monitor *mon, BlockDriverState *bs,
         return -1;
     }
 
-    monitor_printf(mon, "%s (%s) is encrypted.\n", bdrv_get_device_name(bs),
+    monitor_printf(mon, "%s (%s) is encrypted (AJS FLAG).\n", bdrv_get_device_name(bs),
                    bdrv_get_encrypted_filename(bs));
 
     mon->password_completion_cb = completion_cb;

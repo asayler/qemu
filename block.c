@@ -1525,6 +1525,7 @@ int bdrv_open(BlockDriverState **pbs, const char *filename,
     } else if (!runstate_check(RUN_STATE_PRELAUNCH)
                && !runstate_check(RUN_STATE_INMIGRATE)
                && !runstate_check(RUN_STATE_PAUSED)) { /* HACK */
+        fprintf(stderr, "Guest must be stopped for opening of encrypted image\n");
         error_setg(errp,
                    "Guest must be stopped for opening of encrypted image");
         ret = -EBUSY;
@@ -3655,6 +3656,7 @@ void bdrv_set_enable_write_cache(BlockDriverState *bs, bool wce)
 
 int bdrv_is_encrypted(BlockDriverState *bs)
 {
+    fprintf(stderr, "Called bdrv_is_encrypted()\n");
     if (bs->backing_hd && bs->backing_hd->encrypted)
         return 1;
     return bs->encrypted;
@@ -3662,6 +3664,7 @@ int bdrv_is_encrypted(BlockDriverState *bs)
 
 int bdrv_key_required(BlockDriverState *bs)
 {
+    fprintf(stderr, "Called bdrv_key_required()\n");
     BlockDriverState *backing_hd = bs->backing_hd;
 
     if (backing_hd && backing_hd->encrypted && !backing_hd->valid_key)
@@ -4116,6 +4119,7 @@ int bdrv_is_allocated_above(BlockDriverState *top,
 
 const char *bdrv_get_encrypted_filename(BlockDriverState *bs)
 {
+    fprintf(stderr, "Called bdrv_get_encrypted_filename()\n");
     if (bs->backing_hd && bs->backing_hd->encrypted)
         return bs->backing_file;
     else if (bs->encrypted)
