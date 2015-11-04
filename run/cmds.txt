@@ -1,0 +1,55 @@
+$ ../out/qemu-img create -f qcow2 test_plain.qcow2 10M
+Formatting 'test_plain.qcow2', fmt=qcow2 size=10485760 encryption=off
+cluster_size=65536 lazy_refcounts=off 
+Called bdrv_key_required()
+Called bdrv_key_required()
+Called bdrv_key_required()
+Called bdrv_key_required()
+Called bdrv_key_required()
+
+$ ../out/qemu-img convert -o encryption -O
+qcow2 test_plain.qcow2 test_enc.qcow2
+Called bdrv_key_required()
+Called bdrv_key_required()
+Called bdrv_is_encrypted()
+Called bdrv_key_required()
+Called bdrv_key_required()
+Called bdrv_key_required()
+Called bdrv_key_required()
+Called bdrv_key_required()
+Called bdrv_key_required()
+Called bdrv_key_required()
+Called bdrv_is_encrypted()
+Disk image 'test_enc.qcow2' is encrypted (AJS FLAG).
+Called read_password()
+password: 
+Called bdrv_set_key() with key 'testpw'
+
+$ ../out/x86_64-softmmu/qemu-system-x86_64 -m 1024 -enable-kvm -cdrom ./ubuntu-14.04.3-desktop-amd64.iso -drive
+if=virtio,file=./test_plain.qcow2 -drive
+if=virtio,file=./test_enc.qcow2Called bdrv_key_required()
+Called bdrv_key_required()
+Called bdrv_key_required()
+Called bdrv_key_required()
+Called bdrv_key_required()
+Called bdrv_key_required()
+Called bdrv_key_required()
+Called bdrv_key_required()
+Called bdrv_key_required()
+Called bdrv_key_required()
+Called bdrv_is_encrypted()
+Called bdrv_key_required()
+Called bdrv_is_encrypted()
+Called bdrv_key_required()
+Called bdrv_is_encrypted()
+Called monitor_read_bdrv_key_start()
+Called bdrv_key_required()
+Called bdrv_get_encrypted_filename()
+Called monitor_read_password()
+Called bdrv_password_cb() with password 'testpw'
+Called bdrv_set_key() with key 'testpw'
+Called bdrv_key_required()
+Called bdrv_key_required()
+Called bdrv_key_required()
+Called bdrv_key_required()
+Called bdrv_key_required()
