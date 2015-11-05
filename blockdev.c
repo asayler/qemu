@@ -532,8 +532,14 @@ static DriveInfo *blockdev_init(const char *file, QDict *bs_opts,
     }
 
     if (bdrv_key_required(dinfo->bdrv)) {
-        fprintf(stderr, "blockdev_init() - key required - disable autostart\n");
-        autostart = 0;
+        fprintf(stderr, "blockdev_init() - key required\n");
+        const char* password = "testpw";
+        fprintf(stderr, "Setting password '%s'\n", password);
+        if (bdrv_set_key(dinfo->bdrv, password) != 0) {
+            fprintf(stderr, "Failed to set password '%s'\n", password);
+            fprintf(stderr, "Disabling autostart\n");
+            autostart = 0;
+        }
     }
 
     QDECREF(bs_opts);
