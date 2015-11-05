@@ -315,6 +315,8 @@ typedef enum { MEDIA_DISK, MEDIA_CDROM } DriveMediaType;
 static DriveInfo *blockdev_init(const char *file, QDict *bs_opts,
                                 Error **errp)
 {
+    fprintf(stderr, "Called blockdev_init()\n");
+
     const char *buf;
     int ro = 0;
     int bdrv_flags = 0;
@@ -530,6 +532,7 @@ static DriveInfo *blockdev_init(const char *file, QDict *bs_opts,
     }
 
     if (bdrv_key_required(dinfo->bdrv))
+        fprintf(stderr, "blockdev_init() - key required - disable autostart\n");
         autostart = 0;
 
     QDECREF(bs_opts);
@@ -2471,6 +2474,8 @@ void qmp_change_backing_file(const char *device,
 
 void qmp_blockdev_add(BlockdevOptions *options, Error **errp)
 {
+    fprintf(stderr, "qmp_blockdev_add()\n");
+
     QmpOutputVisitor *ov = qmp_output_visitor_new();
     DriveInfo *dinfo;
     QObject *obj;

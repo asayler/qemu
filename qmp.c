@@ -150,6 +150,8 @@ SpiceInfo *qmp_query_spice(Error **errp)
 
 void qmp_cont(Error **errp)
 {
+    fprintf(stderr, "Called qmp_cont()\n");
+
     BlockDriverState *bs;
 
     if (runstate_needs_reset()) {
@@ -164,6 +166,7 @@ void qmp_cont(Error **errp)
     }
     for (bs = bdrv_next(NULL); bs; bs = bdrv_next(bs)) {
         if (bdrv_key_required(bs)) {
+            fprintf(stderr, "qmp_cont() - key required - error + return\n");
             error_set(errp, QERR_DEVICE_ENCRYPTED,
                       bdrv_get_device_name(bs),
                       bdrv_get_encrypted_filename(bs));
