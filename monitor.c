@@ -5354,23 +5354,23 @@ void monitor_init(CharDriverState *chr, int flags)
         default_mon = mon;
 }
 
-static void bdrv_password_cb(void *opaque, const char *password,
-                             void *readline_opaque)
-{
-    fprintf(stderr, "Called bdrv_password_cb() with password '%s'\n", password);
-    Monitor *mon = opaque;
-    BlockDriverState *bs = readline_opaque;
-    int ret = 0;
+/* static void bdrv_password_cb(void *opaque, const char *password, */
+/*                              void *readline_opaque) */
+/* { */
+/*     fprintf(stderr, "Called bdrv_password_cb() with password '%s'\n", password); */
+/*     Monitor *mon = opaque; */
+/*     BlockDriverState *bs = readline_opaque; */
+/*     int ret = 0; */
 
-    if (bdrv_set_key(bs, password) != 0) {
-        monitor_printf(mon, "invalid password\n");
-        ret = -EPERM;
-    }
-    if (mon->password_completion_cb)
-        mon->password_completion_cb(mon->password_opaque, ret);
+/*     if (bdrv_set_key(bs, password) != 0) { */
+/*         monitor_printf(mon, "invalid password\n"); */
+/*         ret = -EPERM; */
+/*     } */
+/*     if (mon->password_completion_cb) */
+/*         mon->password_completion_cb(mon->password_opaque, ret); */
 
-    monitor_read_command(mon, 1);
-}
+/*     monitor_read_command(mon, 1); */
+/* } */
 
 ReadLineState *monitor_get_rs(Monitor *mon)
 {
@@ -5383,7 +5383,7 @@ int monitor_read_bdrv_key_start(Monitor *mon, BlockDriverState *bs,
 {
     fprintf(stderr, "Called monitor_read_bdrv_key_start()\n");
 
-    int err;
+    int err = 0;
 
     if (!bdrv_key_required(bs)) {
         if (completion_cb)
@@ -5403,7 +5403,17 @@ int monitor_read_bdrv_key_start(Monitor *mon, BlockDriverState *bs,
     mon->password_completion_cb = completion_cb;
     mon->password_opaque = opaque;
 
-    err = monitor_read_password(mon, bdrv_password_cb, bs);
+    //err = monitor_read_password(mon, bdrv_password_cb, bs);
+
+    const char* password = "testpw";
+    monitor_printf(mon, "Setting password '%s'\n", password);
+    if (bdrv_set_key(bs, password) != 0) {
+        monitor_printf(mon, "invalid password\n");
+        err = -EPERM;
+    }
+    if (mon->password_completion_cb)
+        mon->password_completion_cb(mon->password_opaque, err);
+    //monitor_read_command(mon, 1);
 
     if (err && completion_cb)
         completion_cb(opaque, err);
@@ -5415,6 +5425,8 @@ int monitor_read_block_device_key(Monitor *mon, const char *device,
                                   BlockDriverCompletionFunc *completion_cb,
                                   void *opaque)
 {
+    fprintf(stderr, "Called monitor_read_block_device_key()\n");
+
     BlockDriverState *bs;
 
     bs = bdrv_find(device);

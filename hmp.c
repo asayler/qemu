@@ -836,6 +836,8 @@ static bool key_is_missing(const BlockInfo *bdev)
 
 void hmp_cont(Monitor *mon, const QDict *qdict)
 {
+    fprintf(stderr, "Called hmp_cont()\n");
+
     BlockInfoList *bdev_list, *bdev;
     Error *err = NULL;
 
@@ -1117,6 +1119,8 @@ static void hmp_change_read_arg(void *opaque, const char *password,
 
 void hmp_change(Monitor *mon, const QDict *qdict)
 {
+    fprintf(stderr, "Called hmp_change()\n");
+
     const char *device = qdict_get_str(qdict, "device");
     const char *target = qdict_get_str(qdict, "target");
     const char *arg = qdict_get_try_str(qdict, "arg");

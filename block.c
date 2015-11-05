@@ -1370,6 +1370,8 @@ int bdrv_open(BlockDriverState **pbs, const char *filename,
               const char *reference, QDict *options, int flags,
               BlockDriver *drv, Error **errp)
 {
+    fprintf(stderr, "Called bdrv_open()\n");
+
     int ret;
     BlockDriverState *file = NULL, *bs;
     const char *drvname;
