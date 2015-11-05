@@ -531,9 +531,10 @@ static DriveInfo *blockdev_init(const char *file, QDict *bs_opts,
         goto err;
     }
 
-    if (bdrv_key_required(dinfo->bdrv))
+    if (bdrv_key_required(dinfo->bdrv)) {
         fprintf(stderr, "blockdev_init() - key required - disable autostart\n");
         autostart = 0;
+    }
 
     QDECREF(bs_opts);
     qemu_opts_del(opts);
