@@ -1,0 +1,21 @@
+Basic Tutamen + QEMU Encrypted QCOW2 Support
+By Andy Sayler
+Spring 2016
+
+1. Setup crypto block device:
+
+$ qemu-img create -o encryption -f qcow2 <clear>.qcow2 1G
+$ qemu-img convert -o encryption -O qcow2 <clear>.qcow2 <encrypted>.qcow2
+First prompt: <blank>
+Second prompt: <secret>
+
+2. Set PATH and PYTHONPATH for tutamencli
+3. Store secret on tutamen via CLI
+4. Set COL_UID and SEC_UID in "blockdev.c"
+5. Build
+6. Run (QEMU will retrieve secret via Tutamen):
+
+./x86_64-softmmu/qemu-system-x86_64 -m 1024 -enable-kvm -drive
+if=virtio,file=<encrypted>.qcow2 -cdrom <bootable>.iso
+
+7. Profit

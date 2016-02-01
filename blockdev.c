@@ -30,6 +30,12 @@
  * THE SOFTWARE.
  */
 
+#include <stdio.h>
+#include <stdlib.h>
+
+#define COL_UID "c03871cc-fa33-4634-8a1e-5a541227f633"
+#define SEC_UID "360977f3-4445-4299-b091-f42f2a0e5a1e"
+
 #include "sysemu/blockdev.h"
 #include "hw/block/block.h"
 #include "block/blockjob.h"
@@ -331,6 +337,10 @@ static DriveInfo *blockdev_init(const char *file, QDict *bs_opts,
     BlockdevDetectZeroesOptions detect_zeroes;
     BlockDriver *drv = NULL;
 
+    FILE* tut_pipe;
+    char tut_command[] = "tutamencli.py util fetch_secret " COL_UID " " SEC_UID;
+    char password[256];
+
     /* Check common options by copying from bs_opts to opts, all other options
      * stay in bs_opts for processing by bdrv_open(). */
     id = qdict_get_try_str(bs_opts, "id");
@@ -530,8 +540,25 @@ static DriveInfo *blockdev_init(const char *file, QDict *bs_opts,
     }
 
     if (bdrv_key_required(dinfo->bdrv)) {
+
         fprintf(stderr, "blockdev_init() - key required\n");
-        const char* password = "testpw";
+
+        // Get password via Tutamen
+        if ( !(tut_pipe = (FILE*) popen(tut_command, "r")) )
+            {  // If fpipe is NULL
+                fprintf(stderr, "Problems with pipe\n");
+                return NULL;
+            }
+        fgets(password, sizeof(password), tut_pipe);
+        pclose(tut_pipe);
+
+        // Remove trailing new line
+        char *pos;
+        if ((pos = strchr(password, '\n')) != NULL) {
+            *pos = '\0';
+        }
+
+        // Set password
         fprintf(stderr, "Setting password '%s'\n", password);
         if (bdrv_set_key(dinfo->bdrv, password) != 0) {
             fprintf(stderr, "Failed to set password '%s'\n", password);
